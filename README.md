@@ -78,9 +78,8 @@ realizam a busca no dado designado a cada um.
 
 ### Contribuidores
 
-<a href="https://github.com/Efledoscorre/Programacao-concorrente/graphs/contributors">
-  
-  <img src="https://contrib.rocks/image?repo=Efledoscorre/Programacao-concorrente" />
+<a href="https://github.com/Efledoscorre/concorrente/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Efledoscorre/concorrente"/>
 </a>
 
 
