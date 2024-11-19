@@ -2,7 +2,7 @@
   <h2 align="center">Visão geral do projeto</h2>
 
   <p align="center">
-    Programa feito em java utilizando threads para leitura de arquivos csv, voltando como resposta o tempo de execução mínimo, médio e máximo de cada execução.. 
+    Programa feito em java utilizando um sistema de busca distribuído utilizando sockets, o sistema é formado por dois servidores (A e B), cada um responsável por uma busca em metade dos dados de artigos científicos. 
     <br>
     </p>
 </p>
@@ -20,9 +20,12 @@
 
 ### Descrição
 
-Este projeto em Java utiliza threads para realizar a leitura eficiente de arquivos CSV que contêm dados de temperatura de várias cidades. O programa processa esses dados para calcular e exibir a temperatura mínima, máxima e média de cada cidade, dentro de um intervalo de anos (1995-2020).
-
-O número de threads pode ser configurado diretamente no código, na classe Main ou SubThread. O projeto atualmente suporta a criação de até 320 threads.
+Projeto realizado em Java 17 para representar um sistema de busca distribuído utilizando sockets. O sistema
+é formado por dois servidores (A e B) cada um responsável por uma busca em metade de um
+dado de artigos científicos do arXiv (https://paperswithcode.com/dataset/arxiv-10).
+Um dos servidores (A) recebe a solicitação de busca do cliente, contendo uma substring de um
+possível título ou introdução de um artigo, envia ao segundo servidor (B) e em seguida ambos
+realizam a busca no dado designado a cada um.
 
 <hr>
 
@@ -50,7 +53,7 @@ O número de threads pode ser configurado diretamente no código, na classe Main
 
 * Em um terminal ou diretamente pelo IntelliJ, clone o repositório do projeto:
 
-* git clone https://github.com/Efledoscorre/Programacao-concorrente
+* git clone https://github.com/Efledoscorre/concorrente
 ### importe o projeto no IntelliJ:
 
 
@@ -67,21 +70,9 @@ O número de threads pode ser configurado diretamente no código, na classe Main
 * Clique com o botão direito na classe Main e selecione Run 'Main.main()'.
 * O programa será compilado e executado, e os resultados serão exibidos no console da IDE.
 
- * Observação:
-Se você quiser alterar o número de threads ou o diretório dos arquivos CSV, você pode modificar esses valores diretamente nas classes Main e SubThread. 
-
-* Observação:
-Ao executar, o programa irá criar 20 arquivos txt na pasta raíz do projeto.
-
-
-
 <hr>
 
 ### Tecnologias utilizadas:
-
-<div style="display: inline_block"><br>
-   <img align="center" alt="Lucas-Java" height="35" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg">
-  <img align="center" alt="Lucas-Java" height="35" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/intellij/intellij-original.svg">
 
   <hr>
 
