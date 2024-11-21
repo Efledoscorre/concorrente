@@ -1,5 +1,6 @@
 package ucb.busca;
 
+import ucb.busca.testeAlgoritmos.RabinAlgorithm;
 import ucb.busca.testeAlgoritmos.SearchAlgorithm;
 import ucb.busca.testeAlgoritmos.ZAlgorithm;
 
@@ -26,5 +27,8 @@ public class Main{
         long fim = System.currentTimeMillis();
 
         System.out.println("Tempo de execução: " + Math.abs(inicio - fim) + "ms");
+
+
     }
+
 }
