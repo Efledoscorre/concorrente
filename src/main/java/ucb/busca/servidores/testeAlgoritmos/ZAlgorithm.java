@@ -4,7 +4,9 @@ import org.json.JSONObject;
 import ucb.busca.servidores.util.ArtigoCientifico;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 
 public class ZAlgorithm implements SearchAlgorithm{
@@ -12,8 +14,8 @@ public class ZAlgorithm implements SearchAlgorithm{
     @Override
     public void buscaSubString(String text, String substring){
 
+        Set<Integer> chavesSubstringsEncontradas = new HashSet<>();
         List<ArtigoCientifico> artigoCientificoList = new ArrayList<>();
-        final JSONObject artigosJson = new JSONObject(text);
 
         //TODO: Avaliar se faz sentido nossa busca ser case insensitive
         String concat = substring + "$" + text;
@@ -44,14 +46,29 @@ public class ZAlgorithm implements SearchAlgorithm{
                         CHAVE DO OBJETO QUE CONTÉM A SUBSTRING FOI ENCONTRADO!!!
                         Chave: %s %n%n""", chaveSubstring);
 
-                String titulo = artigosJson.getJSONObject("title").getString(chaveSubstring.replaceAll("\"", ""));
-                String resumo = artigosJson.getJSONObject("abstract").getString(chaveSubstring.replaceAll("\"", ""));
-                String rotulo = artigosJson.getJSONObject("label").getString(chaveSubstring.replaceAll("\"", ""));
-
-                ArtigoCientifico artigoCientifico = new ArtigoCientifico(titulo, resumo, rotulo);
-                artigoCientificoList.add(artigoCientifico);
+                Integer chaveComoNumero = Integer.valueOf(chaveSubstring.replaceAll("\"", ""));
+                chavesSubstringsEncontradas.add(chaveComoNumero);
             }
         }
+
+        preencheListaArtigosCientificos(artigoCientificoList, chavesSubstringsEncontradas, text);
+
+    }
+
+    private void preencheListaArtigosCientificos(List<ArtigoCientifico> artigosCientificos, Set<Integer> chavesSubstrings, String text){
+        final JSONObject artigosJson = new JSONObject(text);
+
+        final JSONObject titulosJson = artigosJson.getJSONObject("title");
+        final JSONObject resumoJson = artigosJson.getJSONObject("abstract");
+        final JSONObject labelJson = artigosJson.getJSONObject("label");
+
+        chavesSubstrings.forEach(chave -> {
+            String titulo = titulosJson.getString(String.valueOf(chave));
+            String resumo = resumoJson.getString(String.valueOf(chave));
+            String rotulo = labelJson.getString(String.valueOf(chave));
+
+            artigosCientificos.add(new ArtigoCientifico(titulo, resumo, rotulo));
+        });
     }
 
     private void getZarr(String str, int[] Z) {
