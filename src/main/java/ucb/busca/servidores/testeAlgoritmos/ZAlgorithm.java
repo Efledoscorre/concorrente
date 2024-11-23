@@ -1,9 +1,11 @@
 package ucb.busca.servidores.testeAlgoritmos;
 
-public class ZAlgorithm implements SearchAlgorithm{
+import java.io.PrintWriter;
 
-    @Override
-    public void buscaSubString(String text, String substring){
+public class ZAlgorithm{
+
+
+    public void buscaSubString(String text, String substring, PrintWriter saida){
 
         String concat = substring + "$" + text;
 
@@ -16,8 +18,10 @@ public class ZAlgorithm implements SearchAlgorithm{
         for(int i = 0; i < l; ++i){
 
             if(Z[i] == substring.length()){
-                System.out.println("Substring encontrada no index "
-                        + (i - substring.length() - 1));
+                String stringencontrada = "Substring encontrada no index "
+                        + (i - substring.length() - 1);
+                //saida.println(stringencontrada);
+                saida.write(stringencontrada);
             }
         }
     }

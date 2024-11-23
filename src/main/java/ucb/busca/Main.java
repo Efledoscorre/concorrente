@@ -11,7 +11,7 @@ import ucb.busca.servidores.testeAlgoritmos.ZAlgorithm;
 
 public class Main{
 
-    private static SearchAlgorithm searchAlgorithm = new ZAlgorithm();
+    private static ZAlgorithm searchAlgorithm = new ZAlgorithm();
 
     public static void main(String[] args) throws IOException {
 
@@ -27,10 +27,10 @@ public class Main{
 
             PrintWriter saida = new PrintWriter(servidor.getOutputStream(), true);
 
+            saida.println("nucleosyn");
+
             String mensagem = entrada.readLine();
             System.out.println("Mensagem do servidor: " + mensagem);
-
-            saida.println("Obrigado, servidor! Estou conectado.");
 
             entrada.close();
             saida.close();

@@ -1,15 +1,27 @@
 package ucb.busca.servidores;
 
+import ucb.busca.servidores.testeAlgoritmos.SearchAlgorithm;
+import ucb.busca.servidores.testeAlgoritmos.ZAlgorithm;
+
 import java.io.*;
 import java.net.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 
 public class ServidorA{
-    public static void main(String[] args) {
-    	criandoCliente();
-    	criandoServidor();
-   
+    private static final Path path = Paths.get("src/main/java/resources/data/data_A.json");
+    private static final ZAlgorithm algoritmobusca = new ZAlgorithm();
+    public static void main(String[] args) throws IOException {
+        byte[] bytes = Files.readAllBytes(path);
+        String texto = new String(bytes);
+        criandoCliente();
+    	criandoServidor(texto);
+
     }
-    
+
+
     private static void criandoCliente() {
         String SERVIDOR = "localhost";
         int PORTA = 12345;
@@ -38,7 +50,7 @@ public class ServidorA{
     }
     
     
-    private static void criandoServidor(){
+    private static void criandoServidor(String texto){
         int PORTA = 54321;
 
         try {
@@ -55,10 +67,13 @@ public class ServidorA{
 
             PrintWriter saida = new PrintWriter(cliente.getOutputStream(), true);
 
-            saida.println("Bem-vindo ao servidor!");
+
+            String substring = entrada.readLine();
+            algoritmobusca.buscaSubString(texto, substring, saida);
+            System.out.println("Mensagem do cliente: " + substring);
+
+            saida.println("Buscando substring " + substring);
             saida.flush();
-            String mensagem = entrada.readLine();
-            System.out.println("Mensagem do cliente: " + mensagem);
 
             entrada.close();
             saida.close();
