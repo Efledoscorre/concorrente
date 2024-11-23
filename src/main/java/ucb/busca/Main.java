@@ -1,8 +1,7 @@
 package ucb.busca;
 
-import ucb.busca.testeAlgoritmos.RabinAlgorithm;
-import ucb.busca.testeAlgoritmos.SearchAlgorithm;
-import ucb.busca.testeAlgoritmos.ZAlgorithm;
+import ucb.busca.testeAlgoritmos.*;
+
 
 import java.io.IOException;
 import java.nio.file.Files;

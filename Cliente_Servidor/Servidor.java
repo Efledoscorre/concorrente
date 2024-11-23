@@ -1,3 +1,5 @@
+package ucb.busca;
+
 import java.io.*;
 import java.net.*;
 
@@ -28,7 +30,7 @@ public class Servidor {
             saida.close();
             cliente.close();
             servidor.close();
-        }catch(IoException e) {
+        }catch(Exception e) {
             System.out.println("Erro no servidor: " + e.getMessage());
         }
 
