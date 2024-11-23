@@ -3,7 +3,7 @@ package ucb.busca;
 import java.io.*;
 import java.net.*;
 
-public class Servidor {
+public class ServidorB {
     public static void main(String[] args) {
         int PORTA = 12345;
 
