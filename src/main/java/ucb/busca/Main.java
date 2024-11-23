@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.List;
 
 import ucb.busca.servidores.testeAlgoritmos.SearchAlgorithm;
 import ucb.busca.servidores.testeAlgoritmos.ZAlgorithm;
@@ -29,8 +30,10 @@ public class Main{
 
             saida.println("nucleosyn");
 
-            String mensagem = entrada.readLine();
-            System.out.println("Mensagem do servidor: " + mensagem);
+            List<String> mensagem = entrada.lines().toList();
+            System.out.println("Mensagem do servidor: ");
+
+            mensagem.forEach(msg -> System.out.println(msg));
 
             entrada.close();
             saida.close();

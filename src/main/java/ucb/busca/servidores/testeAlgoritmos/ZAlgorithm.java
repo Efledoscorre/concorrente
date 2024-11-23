@@ -1,9 +1,12 @@
 package ucb.busca.servidores.testeAlgoritmos;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ZAlgorithm{
 
+    public List <String> palavrasEncontradas = new ArrayList<>();
 
     public void buscaSubString(String text, String substring, PrintWriter saida){
 
@@ -20,8 +23,8 @@ public class ZAlgorithm{
             if(Z[i] == substring.length()){
                 String stringencontrada = "Substring encontrada no index "
                         + (i - substring.length() - 1);
-                //saida.println(stringencontrada);
-                saida.write(stringencontrada);
+
+                palavrasEncontradas.add(stringencontrada);
             }
         }
     }

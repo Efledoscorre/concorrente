@@ -72,7 +72,7 @@ public class ServidorA{
             algoritmobusca.buscaSubString(texto, substring, saida);
             System.out.println("Mensagem do cliente: " + substring);
 
-            saida.println("Buscando substring " + substring);
+            saida.println(algoritmobusca.palavrasEncontradas);
             saida.flush();
 
             entrada.close();
