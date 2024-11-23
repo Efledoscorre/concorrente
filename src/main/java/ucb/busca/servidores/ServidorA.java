@@ -18,10 +18,11 @@ public class ServidorA{
         byte[] bytes = Files.readAllBytes(path);
         String texto = new String(bytes);
 
-        algoritmobusca.buscaSubString(texto, "probability distributions with");
+//        algoritmobusca.buscaSubString(texto, "probability distributions with");
+        algoritmobusca.buscaSubString(texto, "radiatively");
 
-        criandoCliente();
-    	criandoServidor(texto);
+//        criandoCliente();
+//    	criandoServidor(texto);
 
     }
 
