@@ -1,4 +1,4 @@
-package ucb.busca;
+package ucb.busca.servidores;
 
 import java.io.*;
 import java.net.*;
@@ -17,10 +17,10 @@ public class ServidorA{
             Socket servidor = new Socket(SERVIDOR, PORTA);
             System.out.println("Conectado ao servidor!");
 
-            //Permite com que o cliente leia mensagens
+
             BufferedReader entrada = new BufferedReader(new InputStreamReader(servidor.getInputStream()));
 
-            //Permite com que o cliente envie mensagens
+
             PrintWriter saida = new PrintWriter(servidor.getOutputStream(), true);
 
             String mensagem = entrada.readLine();
@@ -45,14 +45,14 @@ public class ServidorA{
             ServerSocket servidor = new ServerSocket(PORTA);
             System.out.println("Servidor escutando na porta: " + PORTA + " ...");
 
-            //Espera até que o cliente se conecte. Retorna um objeto Socket
+
             Socket cliente = servidor.accept();
             System.out.println("Cliente conectado: " + cliente.getInetAddress().getHostAddress());
 
-            //Permite com que o servidor leia mensagens
+
             BufferedReader entrada = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
 
-            //Permite com que o servidor envie mensagens
+
             PrintWriter saida = new PrintWriter(cliente.getOutputStream(), true);
 
             saida.println("Bem-vindo ao servidor!");

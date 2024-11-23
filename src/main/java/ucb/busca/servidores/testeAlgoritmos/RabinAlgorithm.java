@@ -1,4 +1,4 @@
-package ucb.busca.testeAlgoritmos;
+package ucb.busca.servidores.testeAlgoritmos;
 
 public class RabinAlgorithm implements SearchAlgorithm {
 
