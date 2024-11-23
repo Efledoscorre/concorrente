@@ -16,7 +16,7 @@ public class Main{
     public static void main(String[] args) throws IOException {
 
         String SERVIDOR = "localhost";
-        int PORTA = 12345;
+        int PORTA = 54321;
         try {
             Socket servidor = new Socket(SERVIDOR, PORTA);
             System.out.println("Conectado ao servidor!");
