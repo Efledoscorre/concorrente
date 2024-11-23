@@ -24,6 +24,7 @@ public class ServidorB {
             saida.println("Bem-vindo ao servidor!");
             saida.flush();
             String mensagem = entrada.readLine();
+            
             System.out.println("Mensagem do cliente: " + mensagem);
 
             entrada.close();

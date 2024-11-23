@@ -50,8 +50,8 @@ public class ZAlgorithm implements SearchAlgorithm{
                 chavesSubstringsEncontradas.add(chaveComoNumero);
             }
         }
-
-        preencheListaArtigosCientificos(artigoCientificoList, chavesSubstringsEncontradas, text);
+//        chavesSubstringsEncontradas.forEach(chave->System.out.println(chave));
+//        preencheListaArtigosCientificos(artigoCientificoList, chavesSubstringsEncontradas, text);
 
     }
 
