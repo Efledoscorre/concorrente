@@ -46,7 +46,7 @@ public class ZAlgorithm implements SearchAlgorithm{
                         CHAVE DO OBJETO QUE CONTÉM A SUBSTRING FOI ENCONTRADO!!!
                         Chave: %s %n%n""", chaveSubstring);
 
-                Integer chaveComoNumero = Integer.valueOf(chaveSubstring.replaceAll("\"", ""));
+                Integer chaveComoNumero = Integer.valueOf(chaveSubstring.replaceAll("\"", "").replace(":", ""));
                 chavesSubstringsEncontradas.add(chaveComoNumero);
             }
         }
