@@ -1,12 +1,13 @@
 package ucb.busca;
 
-import ucb.busca.testeAlgoritmos.*;
-
-
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
+import ucb.busca.testeAlgoritmos.SearchAlgorithm;
+import ucb.busca.testeAlgoritmos.ZAlgorithm;
 
 public class Main{
 
@@ -14,20 +15,30 @@ public class Main{
 
     public static void main(String[] args) throws IOException {
 
-        Path path = Paths.get("src/main/java/resources/data/data_A.json");
+        String SERVIDOR = "localhost";
+        int PORTA = 12345;
+        try {
+            Socket servidor = new Socket(SERVIDOR, PORTA);
+            System.out.println("Conectado ao servidor!");
 
-        byte[] bytes = Files.readAllBytes(path);
+            //Permite com que o cliente leia mensagens
+            BufferedReader entrada = new BufferedReader(new InputStreamReader(servidor.getInputStream()));
 
-        String text = new String(bytes);
-        String substring = "Nucleosynthesis";
+            //Permite com que o cliente envie mensagens
+            PrintWriter saida = new PrintWriter(servidor.getOutputStream(), true);
 
-        long inicio = System.currentTimeMillis();
-        searchAlgorithm.buscaSubString(text, substring);
-        long fim = System.currentTimeMillis();
+            String mensagem = entrada.readLine();
+            System.out.println("Mensagem do servidor: " + mensagem);
 
-        System.out.println("Tempo de execução: " + Math.abs(inicio - fim) + "ms");
+            saida.println("Obrigado, servidor! Estou conectado.");
 
+            entrada.close();
+            saida.close();
+            servidor.close();
 
+        } catch(IOException e) {
+            System.out.println("Erro no cliente: " + e.getMessage());
+        }
     }
 
 }
