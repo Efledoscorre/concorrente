@@ -12,10 +12,14 @@ import java.nio.file.Paths;
 
 public class ServidorA{
     private static final Path path = Paths.get("src/main/java/resources/data/data_A.json");
-    private static final ZAlgorithm algoritmobusca = new ZAlgorithm();
+    private static final SearchAlgorithm algoritmobusca = new ZAlgorithm();
+
     public static void main(String[] args) throws IOException {
         byte[] bytes = Files.readAllBytes(path);
         String texto = new String(bytes);
+
+        algoritmobusca.buscaSubString(texto, "probability distributions with");
+
         criandoCliente();
     	criandoServidor(texto);
 
@@ -69,10 +73,10 @@ public class ServidorA{
 
 
             String substring = entrada.readLine();
-            algoritmobusca.buscaSubString(texto, substring, saida);
+            algoritmobusca.buscaSubString(texto, substring);
             System.out.println("Mensagem do cliente: " + substring);
 
-            saida.println(algoritmobusca.palavrasEncontradas);
+            saida.println(algoritmobusca);
             saida.flush();
 
             entrada.close();

@@ -1,16 +1,14 @@
 package ucb.busca.servidores.testeAlgoritmos;
 
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.regex.Matcher;
 
-public class ZAlgorithm{
+public class ZAlgorithm implements SearchAlgorithm{
 
-    public List <String> palavrasEncontradas = new ArrayList<>();
+    @Override
+    public void buscaSubString(String text, String substring){
 
-    public void buscaSubString(String text, String substring, PrintWriter saida){
-
-        String concat = substring + "$" + text;
+        //TODO: Avaliar se faz sentido nossa busca ser case insensitive
+        String concat = substring.toLowerCase() + "$" + text.toLowerCase();
 
         int l = concat.length();
 
@@ -21,10 +19,21 @@ public class ZAlgorithm{
         for(int i = 0; i < l; ++i){
 
             if(Z[i] == substring.length()){
-                String stringencontrada = "Substring encontrada no index "
-                        + (i - substring.length() - 1);
+                StringBuilder substringBuilder = new StringBuilder(substring);
+                Matcher matcher = pattern.matcher(substringBuilder);
 
-                palavrasEncontradas.add(stringencontrada);
+                int indexSubstringNoTexto = i - substring.length() - 1;
+                System.out.println("Caractére do começo da substring: " + text.charAt(indexSubstringNoTexto));
+
+                while(!matcher.find()) {
+                    System.out.println("String antes:" + substringBuilder);
+                    substringBuilder.insert(0, text.charAt(indexSubstringNoTexto));
+                    indexSubstringNoTexto--;
+                    System.out.println("String depois:" + substringBuilder + "\n");
+                }
+                System.out.printf("""
+                        CHAVE DO OBJETO QUE CONTÉM A SUBSTRING FOI ENCONTRADO!!!
+                        Chave: %s %n%n""", matcher.group());
             }
         }
     }
