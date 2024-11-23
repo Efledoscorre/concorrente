@@ -1,7 +1,6 @@
 package ucb.busca.servidores;
 
-import ucb.busca.servidores.testeAlgoritmos.SearchAlgorithm;
-import ucb.busca.servidores.testeAlgoritmos.ZAlgorithm;
+import ucb.busca.servidores.testeAlgoritmos.*;
 
 import java.io.*;
 import java.net.*;
@@ -12,17 +11,18 @@ import java.nio.file.Paths;
 
 public class ServidorA{
     private static final Path path = Paths.get("src/main/java/resources/data/data_A.json");
-    private static final SearchAlgorithm algoritmobusca = new ZAlgorithm();
+    private static final SearchAlgorithm algoritmobusca = new AhoCorasickAlgorithm();
+    private static String substring;
 
     public static void main(String[] args) throws IOException {
         byte[] bytes = Files.readAllBytes(path);
         String texto = new String(bytes);
 
 //        algoritmobusca.buscaSubString(texto, "probability distributions with");
-        algoritmobusca.buscaSubString(texto, "radiatively");
+// 		  algoritmobusca.buscaSubString(texto, "radiatively");
 
-//        criandoCliente();
-//    	criandoServidor(texto);
+        criandoCliente();
+        criandoServidor(texto);
 
     }
 
@@ -39,11 +39,12 @@ public class ServidorA{
 
 
             PrintWriter saida = new PrintWriter(servidor.getOutputStream(), true);
-
+            
+            saida.println(substring);
+            
             String mensagem = entrada.readLine();
             System.out.println("Mensagem do servidor: " + mensagem);
 
-            saida.println("Obrigado, servidor! Estou conectado.");
 
             entrada.close();
             saida.close();
