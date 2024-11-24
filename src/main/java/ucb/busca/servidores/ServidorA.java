@@ -1,27 +1,29 @@
 package ucb.busca.servidores;
 
 import ucb.busca.servidores.testeAlgoritmos.*;
+import ucb.busca.servidores.util.ArtigoCientifico;
 
 import java.io.*;
 import java.net.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 
 public class ServidorA{
-    private static final Path path = Paths.get("src/main/java/resources/data/data_A.json");
-    private static final SearchAlgorithm algoritmobusca = new AhoCorasickAlgorithm();
+    private static final Path PATH_DADOS_JSON = Paths.get("src/main/java/resources/data/data_A.json");
+    private static final SearchAlgorithm ALGORITMO_BUSCA = new ZAlgorithm();
     private static String substring;
 
     public static void main(String[] args) throws IOException {
-        byte[] bytes = Files.readAllBytes(path);
+        byte[] bytes = Files.readAllBytes(PATH_DADOS_JSON);
         String texto = new String(bytes);
 
-//        algoritmobusca.buscaSubString(texto, "probability distributions with");
-// 		  algoritmobusca.buscaSubString(texto, "radiatively");
+//        ALGORITMO_BUSCA.buscaSubString(texto, "probability distributions with");
+// 		  ALGORITMO_BUSCA.buscaSubString(texto, "radiatively");
 
-        criandoCliente();
+//        criandoCliente();
         criandoServidor(texto);
 
     }
@@ -75,10 +77,10 @@ public class ServidorA{
 
 
             String substring = entrada.readLine();
-            algoritmobusca.buscaSubString(texto, substring);
+            List<ArtigoCientifico> artigosCientificos = ALGORITMO_BUSCA.buscaSubString(texto, substring);
             System.out.println("Mensagem do cliente: " + substring);
 
-            saida.println(algoritmobusca);
+            saida.println(artigosCientificos);
             saida.flush();
 
             entrada.close();
