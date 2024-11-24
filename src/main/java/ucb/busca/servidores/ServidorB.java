@@ -10,12 +10,12 @@ import ucb.busca.servidores.testeAlgoritmos.AhoCorasickAlgorithm;
 import ucb.busca.servidores.testeAlgoritmos.SearchAlgorithm;
 
 public class ServidorB {
-	
-	   private static final Path path = Paths.get("src/main/java/resources/data/data_B.json");
-	   private static final SearchAlgorithm algoritmobusca = new AhoCorasickAlgorithm();
+
+    private static final Path PATH_DADOS_JSON = Paths.get("src/main/java/resources/data/data_B.json");
+    private static final SearchAlgorithm algoritmobusca = new AhoCorasickAlgorithm();
 	    
     public static void main(String[] args) throws IOException {
-    	byte[] bytes = Files.readAllBytes(path);
+    	byte[] bytes = Files.readAllBytes(PATH_DADOS_JSON);
         String texto = new String(bytes);
          
         int PORTA = 12345;
@@ -24,21 +24,17 @@ public class ServidorB {
             ServerSocket servidor = new ServerSocket(PORTA);
             System.out.println("Servidor escutando na porta: " + PORTA + " ...");
 
-
             Socket cliente = servidor.accept();
             System.out.println("Cliente conectado: " + cliente.getInetAddress().getHostAddress());
 
-
             BufferedReader entrada = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
 
+            System.out.println("Mensagem do SERVIDOR A: " + entrada.readLine());
 
             PrintWriter saida = new PrintWriter(cliente.getOutputStream(), true);
 
-            saida.println("Bem-vindo ao servidor!");
+            saida.println("Bem-vindo ao servidor B!");
             saida.flush();
-            String substring = entrada.readLine();
-            algoritmobusca.buscaSubString(texto, substring);
-            System.out.println("Mensagem do cliente: " + substring);
 
             entrada.close();
             saida.close();
@@ -47,7 +43,6 @@ public class ServidorB {
         }catch(Exception e) {
             System.out.println("Erro no servidor: " + e.getMessage());
         }
-
 
     }
 }
