@@ -1,8 +1,10 @@
 package ucb.busca.servidores.testeAlgoritmos;
 
+import org.json.JSONObject;
 import ucb.busca.servidores.util.ArtigoCientifico;
 
 import java.util.*;
+import java.util.regex.Matcher;
 
 public class AhoCorasickAlgorithm implements SearchAlgorithm {
 	private static final int MAXS = 500;
@@ -18,8 +20,11 @@ public class AhoCorasickAlgorithm implements SearchAlgorithm {
     }
 
     @Override
-    public List<ArtigoCientifico> buscaSubString(String text, String keywords) {
-        String[] arr = keywords.split(" ");
+    public List<ArtigoCientifico> buscaSubString(String text, String substring) {
+        Set<Integer> chavesArtigosEncontrados = new HashSet<>();
+        Matcher matcher;
+
+        String[] arr = new String[] {substring};
         int k = arr.length;
         buildMatchingMachine(arr, k);
 
@@ -31,11 +36,45 @@ public class AhoCorasickAlgorithm implements SearchAlgorithm {
 
             for (int j = 0; j < k; j++) {
                 if ((out[currentState] & (1 << j)) > 0) {
-                    System.out.println("Palavra " + arr[j] +" encontrada no " + (i - arr[j].length() + 1) + " a " + i);
+                    StringBuilder substringBuilder = new StringBuilder(substring);
+                    int indexSubstringNoTexto = i - substring.length() - 1;
+
+                    while(true) {
+                        matcher = PATTERN.matcher(substringBuilder);
+
+                        if (matcher.find())
+                            break;
+
+                        substringBuilder.insert(0, text.charAt(--indexSubstringNoTexto));
+                    }
+                    String chaveSubstring = matcher.group();
+                    int chaveComoNumero = Integer.parseInt(chaveSubstring.replaceAll("\"", "").replaceAll(":", ""));
+                    chavesArtigosEncontrados.add(chaveComoNumero + 1);
                 }
             }
         }
-        return Collections.emptyList();
+        return retornaArtigosCientificos(chavesArtigosEncontrados, text);
+    }
+
+    private List<ArtigoCientifico> retornaArtigosCientificos(Set<Integer> chavesSubstrings, String text){
+
+        List<ArtigoCientifico> artigosCientificos = new LinkedList<>();
+
+        final JSONObject artigosJson = new JSONObject(text);
+
+        final JSONObject titulosJson = artigosJson.getJSONObject("title");
+        final JSONObject resumoJson = artigosJson.getJSONObject("abstract");
+        final JSONObject labelJson = artigosJson.getJSONObject("label");
+
+        chavesSubstrings.forEach(chave -> {
+            String titulo = titulosJson.getString(String.valueOf(chave));
+            String resumo = resumoJson.getString(String.valueOf(chave));
+            String rotulo = labelJson.getString(String.valueOf(chave));
+
+            artigosCientificos.add(new ArtigoCientifico(titulo, resumo, rotulo));
+        });
+
+        return artigosCientificos;
     }
 
     private int buildMatchingMachine(String[] arr, int k) {
