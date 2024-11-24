@@ -2,9 +2,22 @@ package ucb.busca.servidores;
 
 import java.io.*;
 import java.net.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import ucb.busca.servidores.testeAlgoritmos.AhoCorasickAlgorithm;
+import ucb.busca.servidores.testeAlgoritmos.SearchAlgorithm;
 
 public class ServidorB {
-    public static void main(String[] args) {
+	
+	   private static final Path path = Paths.get("src/main/java/resources/data/data_B.json");
+	   private static final SearchAlgorithm algoritmobusca = new AhoCorasickAlgorithm();
+	    
+    public static void main(String[] args) throws IOException {
+    	byte[] bytes = Files.readAllBytes(path);
+        String texto = new String(bytes);
+         
         int PORTA = 12345;
 
         try {
@@ -23,9 +36,9 @@ public class ServidorB {
 
             saida.println("Bem-vindo ao servidor!");
             saida.flush();
-            String mensagem = entrada.readLine();
-            
-            System.out.println("Mensagem do cliente: " + mensagem);
+            String substring = entrada.readLine();
+            algoritmobusca.buscaSubString(texto, substring);
+            System.out.println("Mensagem do cliente: " + substring);
 
             entrada.close();
             saida.close();
