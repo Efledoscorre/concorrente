@@ -74,6 +74,10 @@ realizam a busca no dado designado a cada um.
 
 ### Tecnologias utilizadas:
 
+<div style="display: inline_block"><br>
+   <img align="center" alt="Lucas-Java" height="35" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg">
+  <img align="center" alt="Lucas-Java" height="35" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/intellij/intellij-original.svg">
+
   <hr>
 
 ### Contribuidores
