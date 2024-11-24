@@ -8,17 +8,14 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Scanner;
 
-import ucb.busca.servidores.testeAlgoritmos.ZAlgorithm;
-
 public class Main{
-	static Scanner scanner = new Scanner(System.in);
-	
-    private static ZAlgorithm searchAlgorithm = new ZAlgorithm();
+	private static final Scanner SCANNER = new Scanner(System.in);
+
 
     public static void main(String[] args) throws IOException {
 
     	System.out.println("Digite o que deseja pesquisar: ");
-    	String subString = scanner.next();
+    	String subString = SCANNER.next();
     	
         String SERVIDOR = "localhost";
         int PORTA = 54321;

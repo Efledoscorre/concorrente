@@ -1,5 +1,7 @@
 package ucb.busca.servidores.testeAlgoritmos;
 
+import ucb.busca.servidores.util.ArtigoCientifico;
+
 import java.util.*;
 
 public class AhoCorasickAlgorithm implements SearchAlgorithm {
@@ -16,7 +18,7 @@ public class AhoCorasickAlgorithm implements SearchAlgorithm {
     }
 
     @Override
-    public void buscaSubString(String text, String keywords) {
+    public List<ArtigoCientifico> buscaSubString(String text, String keywords) {
         String[] arr = keywords.split(" ");
         int k = arr.length;
         buildMatchingMachine(arr, k);
@@ -33,6 +35,7 @@ public class AhoCorasickAlgorithm implements SearchAlgorithm {
                 }
             }
         }
+        return Collections.emptyList();
     }
 
     private int buildMatchingMachine(String[] arr, int k) {

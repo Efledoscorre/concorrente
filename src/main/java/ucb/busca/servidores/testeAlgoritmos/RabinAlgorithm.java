@@ -1,5 +1,10 @@
 package ucb.busca.servidores.testeAlgoritmos;
 
+import ucb.busca.servidores.util.ArtigoCientifico;
+
+import java.util.Collections;
+import java.util.List;
+
 public class RabinAlgorithm implements SearchAlgorithm {
 
     public final static int d = 256;
@@ -8,7 +13,7 @@ public class RabinAlgorithm implements SearchAlgorithm {
 
     @Override
 
-    public void buscaSubString(String txt, String pat)
+    public List<ArtigoCientifico> buscaSubString(String txt, String pat)
     {
         int M = pat.length();
         int N = txt.length();
@@ -55,6 +60,7 @@ public class RabinAlgorithm implements SearchAlgorithm {
                     t = (t + q);
             }
         }
+        return Collections.emptyList();
     }
 
 }
