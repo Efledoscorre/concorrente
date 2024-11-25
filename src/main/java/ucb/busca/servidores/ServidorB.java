@@ -31,9 +31,9 @@ public class ServidorB {
 
             System.out.println("Mensagem do SERVIDOR A: " + entrada.readLine());
 
-            PrintWriter saida = new PrintWriter(cliente.getOutputStream(), true);
+            ObjectOutputStream saida = new ObjectOutputStream(cliente.getOutputStream());
 
-            saida.println("Bem-vindo ao servidor B!");
+            saida.writeObject("Bem-vindo ao servidor B!");
             saida.flush();
 
             entrada.close();
