@@ -3,39 +3,31 @@ package ucb.busca.servidores;
 import ucb.busca.servidores.testeAlgoritmos.*;
 import ucb.busca.servidores.util.ArtigoCientifico;
 
-import javax.swing.*;
 import java.io.*;
 import java.net.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class ServidorA {
     private static final Path PATH_DADOS_JSON = Paths.get("src/main/java/resources/data/data_A.json");
+    private static final int PORTA = 54321;
     private static final SearchAlgorithm ALGORITMO_BUSCA = new ZAlgorithm();
-    private static String substring;
 
     public static void main(String[] args) throws IOException {
         byte[] bytes = Files.readAllBytes(PATH_DADOS_JSON);
         String texto = new String(bytes);
 
-        List<ArtigoCientifico> artigoCientificos = ALGORITMO_BUSCA.buscaSubString(texto, "Probing new physics in");
-//        artigoCientificos.forEach(System.out::println);
-//        ALGORITMO_BUSCA.buscaSubString(texto, "probability distributions with");
-// 		  ALGORITMO_BUSCA.buscaSubString(texto, "radiatively");
-
-//        criaCliente();
         criaServidor(texto);
-
     }
 
     private static void criaServidor(String texto) {
-        int PORTA = 54321;
 
         try {
             ServerSocket servidor = new ServerSocket(PORTA);
@@ -50,31 +42,34 @@ public class ServidorA {
             String substring = dataFromCliente.readLine();
             System.out.println("Mensagem do MAIN: " + substring);
 
+            ExecutorService executorThreadB = Executors.newSingleThreadExecutor();
+            Future<List<ArtigoCientifico>> future = executorThreadB.submit(() -> mandaSubstringToServidorB(substring));
+
+            List<ArtigoCientifico> artigosDoServidorB = future.get();
+            executorThreadB.shutdown();
+
+            long inicio = System.currentTimeMillis();
             List<ArtigoCientifico> artigosDoServidorA = ALGORITMO_BUSCA.buscaSubString(texto, substring);
-
-            List<ArtigoCientifico> artigosDoServidorB;
-
-            Thread threadServidorB = new Thread(() ->{
-                artigosDoServidorB = mandaSubstringToServidorB(substring);
-            });
-
-           threadServidorB.start();
-           threadServidorB.join();
+            long fim = System.currentTimeMillis();
 
             List<ArtigoCientifico> artigosTotal = new ArrayList<>();
 
-            //            PrintWriter saida = new PrintWriter(cliente.getOutputStream(), true);
-            ObjectOutputStream saida = new ObjectOutputStream(cliente.getOutputStream());
-
-            //            saida.println(artigosCientificos);
+            ObjectOutputStream dataToClient = new ObjectOutputStream(cliente.getOutputStream());
 
             artigosTotal.addAll(artigosDoServidorA);
             artigosTotal.addAll(artigosDoServidorB);
-            saida.writeObject(artigosTotal);
-            saida.flush();
+
+            dataToClient.writeObject(artigosTotal);
+            dataToClient.flush();
+
+            System.out.printf("""
+                    
+                    %d artigos encontrados.
+                    Levou %dms
+                    """, artigosDoServidorA.size(), Math.abs(inicio - fim));
 
             dataFromCliente.close();
-            saida.close();
+            dataToClient.close();
             cliente.close();
             servidor.close();
         } catch (Exception e) {
@@ -93,12 +88,10 @@ public class ServidorA {
             PrintWriter dataToServidorB = new PrintWriter(servidorB.getOutputStream(), true);
             dataToServidorB.println(substring);
 
-//            BufferedReader entrada = new BufferedReader(new InputStreamReader(servidorB.getInputStream()));
 
             ObjectInputStream dataFromServidorB = new ObjectInputStream(servidorB.getInputStream());
 
             List<ArtigoCientifico> artigosDoServidorB = (List<ArtigoCientifico>) dataFromServidorB.readObject();
-//            String resposta = entrada.readLine();
 
 
             dataFromServidorB.close();

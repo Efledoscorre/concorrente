@@ -8,28 +8,28 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main{
+
 	private static final Scanner SCANNER = new Scanner(System.in);
+    private static final String SERVIDOR = "localhost";
+    private static final int PORTA = 54321;
 
-
-    public static void main(String[] args) throws IOException {
-    	
-        final String SERVIDOR = "localhost";
-        final int PORTA = 54321;
+    public static void main(String[] args){
 
         try {
             Socket servidor = new Socket(SERVIDOR, PORTA);
             System.out.println("Conectado ao servidor!");
 
             System.out.print("Digite o que deseja pesquisar: ");
-            String subString = SCANNER.next();
+            String subString = SCANNER.nextLine();
 
             PrintWriter dataToServidor = new PrintWriter(servidor.getOutputStream(), true);
             dataToServidor.println(subString);
 
+            long inicio = System.currentTimeMillis();
             ObjectInputStream dataFromServidor = new ObjectInputStream(servidor.getInputStream());
 
-
             List<ArtigoCientifico> artigosTotal = (List<ArtigoCientifico>) dataFromServidor.readObject();
+            long fim = System.currentTimeMillis();
 
             for(int i = 0 ; i < artigosTotal.size(); i++){
             	System.out.println("----------------------------------------");
@@ -38,11 +38,13 @@ public class Main{
                 System.out.println(artigosTotal.get(i).getTitulo());
                 System.out.println("Resumo: ");
                 System.out.println(artigosTotal.get(i).getResumo());
-
-                System.out.println(i);
             }
 
-            System.out.println(artigosTotal.size());
+            System.out.printf("""
+                    
+                    %d artigos científicos encontrados.
+                    Levou %dms
+                    """, artigosTotal.size(), Math.abs(inicio - fim));
 
             dataFromServidor.close();
             dataToServidor.close();
