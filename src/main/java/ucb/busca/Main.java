@@ -32,7 +32,12 @@ public class Main{
             List<ArtigoCientifico> artigosTotal = (List<ArtigoCientifico>) dataFromServidor.readObject();
 
             for(int i = 0 ; i < artigosTotal.size(); i++){
+            	System.out.println("----------------------------------------");
+                System.out.println("Rótulo: " + artigosTotal.get(i).getRotulo());
+            	System.out.println("Título: ");
                 System.out.println(artigosTotal.get(i).getTitulo());
+                System.out.println("Resumo: ");
+                System.out.println(artigosTotal.get(i).getResumo());
 
                 System.out.println(i);
             }
