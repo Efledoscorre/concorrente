@@ -14,8 +14,7 @@ public class ZAlgorithm implements SearchAlgorithm{
         Set<Integer> chavesArtigosEncontrados = new HashSet<>();
         Matcher matcher = null;
 
-        //TODO: Avaliar se faz sentido nossa busca ser case insensitive
-        String concat = substring + "$" + text;
+        String concat = substring.toLowerCase() + "$" + text.toLowerCase();
 
         int l = concat.length();
 
@@ -26,12 +25,12 @@ public class ZAlgorithm implements SearchAlgorithm{
         for(int i = 0; i < l; ++i){
 
             if(Z[i] == substring.length()){
-//                System.out.println("SUBSTRING: "+substring);
+
                 StringBuilder substringBuilder = new StringBuilder(substring);
 
                 int indexSubstringNoTexto = i - substring.length() - 1;
-//                System.out.println("Caractére do começo da substring: " + text.charAt(indexSubstringNoTexto));
-//                System.out.println("INDEX = " + indexSubstringNoTexto);
+
+
                 while(true) {
 
                     matcher = PATTERN.matcher(substringBuilder);
@@ -39,20 +38,15 @@ public class ZAlgorithm implements SearchAlgorithm{
                     if (matcher.find())
                         break;
 
-//                    System.out.println("String antes:" + substringBuilder);
                     substringBuilder.insert(0, text.charAt(--indexSubstringNoTexto));
-//                    System.out.println("String depois:" + substringBuilder);
                 }
                 String chaveSubstring = matcher.group();
-//                System.out.printf("""
-//                        CHAVE DO OBJETO QUE CONTÉM A SUBSTRING FOI ENCONTRADO!!!
-//                        Chave: %s %n%n""", chaveSubstring);
 
                 Integer chaveComoNumero = Integer.valueOf(chaveSubstring.replaceAll("\"", "").replaceAll(":", ""));
                 chavesArtigosEncontrados.add(chaveComoNumero);
             }
         }
-//        chavesSubstringsEncontradas.forEach(chave->System.out.println(chave));
+
         return retornaArtigosCientificos(chavesArtigosEncontrados, text);
     }
 
