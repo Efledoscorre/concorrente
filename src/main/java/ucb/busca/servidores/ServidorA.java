@@ -18,7 +18,7 @@ import java.util.concurrent.Future;
 public class ServidorA {
     private static final Path PATH_DADOS_JSON = Paths.get("src/main/java/resources/data/data_A.json");
     private static final int PORTA = 54321;
-    private static final SearchAlgorithm ALGORITMO_BUSCA = new ZAlgorithm();
+    private static final SearchAlgorithm ALGORITMO_BUSCA = new KMPAlgorithm();
 
     public static void main(String[] args) throws IOException {
         byte[] bytes = Files.readAllBytes(PATH_DADOS_JSON);
@@ -49,7 +49,7 @@ public class ServidorA {
             executorThreadB.shutdown();
 
             long inicio = System.currentTimeMillis();
-            List<ArtigoCientifico> artigosDoServidorA = ALGORITMO_BUSCA.buscaSubString(texto, substring);
+            List<ArtigoCientifico> artigosDoServidorA = ALGORITMO_BUSCA.buscaSubString(texto.toLowerCase(), substring.toLowerCase());
             long fim = System.currentTimeMillis();
 
             List<ArtigoCientifico> artigosTotal = new ArrayList<>();

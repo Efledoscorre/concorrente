@@ -14,7 +14,7 @@ public class ZAlgorithm implements SearchAlgorithm{
         Set<Integer> chavesArtigosEncontrados = new HashSet<>();
         Matcher matcher = null;
 
-        String concat = substring.toLowerCase() + "$" + text.toLowerCase();
+        String concat = substring + "$" + text;
 
         int l = concat.length();
 
