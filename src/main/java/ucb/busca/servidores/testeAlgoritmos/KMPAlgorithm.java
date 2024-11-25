@@ -74,7 +74,6 @@ public class KMPAlgorithm implements SearchAlgorithm{
     @Override
     public List<ArtigoCientifico> buscaSubString(String text, String substring) {
         List<Integer> res = search(substring, text);
-        System.out.println(res);
         Set<Integer> chavesArtigosEncontrados = new HashSet<>();
         Matcher matcher = null;
 
@@ -97,7 +96,6 @@ public class KMPAlgorithm implements SearchAlgorithm{
             Integer chaveComoNumero = Integer.valueOf(chaveSubstring.replaceAll("\"", "").replaceAll(":", ""));
             chavesArtigosEncontrados.add(chaveComoNumero);
         }
-        chavesArtigosEncontrados.forEach(System.out::println);
         return retornaArtigosCientificos(chavesArtigosEncontrados, text);
     }
 
@@ -118,7 +116,6 @@ public class KMPAlgorithm implements SearchAlgorithm{
 
             artigosCientificos.add(new ArtigoCientifico(titulo, resumo, rotulo));
         });
-        System.out.println(artigosCientificos.get(0).getTitulo());
         return artigosCientificos;
     }
 }
