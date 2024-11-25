@@ -52,17 +52,21 @@ public class ServidorA {
 
             List<ArtigoCientifico> artigosDoServidorA = ALGORITMO_BUSCA.buscaSubString(texto, substring);
 
-            List<ArtigoCientifico> artigosDoServidorB = mandaSubstringToServidorB(substring);
+            List<ArtigoCientifico> artigosDoServidorB;
+
+            Thread threadServidorB = new Thread(() ->{
+                artigosDoServidorB = mandaSubstringToServidorB(substring);
+            });
+
+           threadServidorB.start();
+           threadServidorB.join();
 
             List<ArtigoCientifico> artigosTotal = new ArrayList<>();
-
-
 
             //            PrintWriter saida = new PrintWriter(cliente.getOutputStream(), true);
             ObjectOutputStream saida = new ObjectOutputStream(cliente.getOutputStream());
 
             //            saida.println(artigosCientificos);
-
 
             artigosTotal.addAll(artigosDoServidorA);
             artigosTotal.addAll(artigosDoServidorB);
