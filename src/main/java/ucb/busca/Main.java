@@ -1,5 +1,7 @@
 package ucb.busca;
 
+import ucb.busca.servidores.util.ArtigoCientifico;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.List;
@@ -26,9 +28,16 @@ public class Main{
 
             ObjectInputStream dataFromServidor = new ObjectInputStream(servidor.getInputStream());
 
-            Object object = dataFromServidor.readObject();
-            System.out.println("Mensagem do servidor: " + object);
-            System.out.println(object.getClass());
+
+            List<ArtigoCientifico> artigosTotal = (List<ArtigoCientifico>) dataFromServidor.readObject();
+
+            for(int i = 0 ; i < artigosTotal.size(); i++){
+                System.out.println(artigosTotal.get(i).getTitulo());
+
+                System.out.println(i);
+            }
+
+            System.out.println(artigosTotal.size());
 
             dataFromServidor.close();
             dataToServidor.close();

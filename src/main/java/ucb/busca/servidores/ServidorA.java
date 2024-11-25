@@ -3,17 +3,21 @@ package ucb.busca.servidores;
 import ucb.busca.servidores.testeAlgoritmos.*;
 import ucb.busca.servidores.util.ArtigoCientifico;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 
-public class ServidorA{
+public class ServidorA {
     private static final Path PATH_DADOS_JSON = Paths.get("src/main/java/resources/data/data_A.json");
-    private static final SearchAlgorithm ALGORITMO_BUSCA = new AhoCorasickAlgorithm();
+    private static final SearchAlgorithm ALGORITMO_BUSCA = new ZAlgorithm();
     private static String substring;
 
     public static void main(String[] args) throws IOException {
@@ -30,7 +34,7 @@ public class ServidorA{
 
     }
 
-    private static void criaServidor(String texto){
+    private static void criaServidor(String texto) {
         int PORTA = 54321;
 
         try {
@@ -41,34 +45,40 @@ public class ServidorA{
             Socket cliente = servidor.accept();
             System.out.println("Cliente conectado: " + cliente.getInetAddress().getHostAddress());
 
-            BufferedReader dataFromServidor = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
+            BufferedReader dataFromCliente = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
 
-            String substring = dataFromServidor.readLine();
+            String substring = dataFromCliente.readLine();
             System.out.println("Mensagem do MAIN: " + substring);
 
-    //            List<ArtigoCientifico> artigosCientificos = ALGORITMO_BUSCA.buscaSubString(texto, substring);
+            List<ArtigoCientifico> artigosDoServidorA = ALGORITMO_BUSCA.buscaSubString(texto, substring);
 
-            mandaSubstringToServidorB(substring);
+            List<ArtigoCientifico> artigosDoServidorB = mandaSubstringToServidorB(substring);
+
+            List<ArtigoCientifico> artigosTotal = new ArrayList<>();
 
 
 
-    //            PrintWriter saida = new PrintWriter(cliente.getOutputStream(), true);
+            //            PrintWriter saida = new PrintWriter(cliente.getOutputStream(), true);
             ObjectOutputStream saida = new ObjectOutputStream(cliente.getOutputStream());
 
-    //            saida.println(artigosCientificos);
-            saida.writeObject(List.of(1));
+            //            saida.println(artigosCientificos);
+
+
+            artigosTotal.addAll(artigosDoServidorA);
+            artigosTotal.addAll(artigosDoServidorB);
+            saida.writeObject(artigosTotal);
             saida.flush();
 
-            dataFromServidor.close();
+            dataFromCliente.close();
             saida.close();
             cliente.close();
             servidor.close();
-        }catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("Erro no servidor: " + e.getMessage());
         }
     }
 
-    private static void mandaSubstringToServidorB(String substring){
+    private static List<ArtigoCientifico> mandaSubstringToServidorB(String substring) {
 
         String SERVIDOR = "localhost";
         int PORTA = 12345;
@@ -81,20 +91,24 @@ public class ServidorA{
 
 //            BufferedReader entrada = new BufferedReader(new InputStreamReader(servidorB.getInputStream()));
 
-            ObjectInputStream dataFromServidor = new ObjectInputStream(servidorB.getInputStream());
+            ObjectInputStream dataFromServidorB = new ObjectInputStream(servidorB.getInputStream());
 
-            Object object = dataFromServidor.readObject();
+            List<ArtigoCientifico> artigosDoServidorB = (List<ArtigoCientifico>) dataFromServidorB.readObject();
 //            String resposta = entrada.readLine();
 
-            System.out.println("Mensagem do servidor: " + object);
 
-            dataFromServidor.close();
+            dataFromServidorB.close();
             dataToServidorB.close();
             servidorB.close();
 
-        } catch(Exception e) {
+            return artigosDoServidorB;
+
+        } catch (Exception e) {
             System.out.println("Erro no cliente: " + e.getMessage());
         }
 
+    return Collections.emptyList();
+
     }
+
 }
