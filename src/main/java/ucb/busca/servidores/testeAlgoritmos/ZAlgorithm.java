@@ -4,15 +4,45 @@ import org.json.JSONObject;
 import ucb.busca.servidores.util.ArtigoCientifico;
 
 import java.util.*;
-import java.util.regex.Matcher;
 
 public class ZAlgorithm implements SearchAlgorithm{
 
     @Override
-    public List<ArtigoCientifico> buscaSubString(String text, String substring){
+    public List<ArtigoCientifico> buscaSubString(JSONObject json, String substring){
+        System.out.println("SUBSTRING A SER ENCONTRADO: " + substring);
+        LinkedList<ArtigoCientifico> artigosCientificos = new LinkedList<>();
 
-        Set<Integer> chavesArtigosEncontrados = new HashSet<>();
-        Matcher matcher = null;
+        JSONObject tituloObj = json.getJSONObject("title");
+        JSONObject abstractObj = json.getJSONObject("abstract");
+        JSONObject labelObj = json.getJSONObject("label");
+
+        Iterator<String> chaves = tituloObj.keys();
+
+        while(chaves.hasNext()){
+            String chave = chaves.next();
+
+            String titulo = tituloObj.getString(chave);
+            String resumo = abstractObj.getString(chave);
+            String rotulo = labelObj.getString(chave);
+
+            if (existsSubstring(substring.toLowerCase(), titulo.toLowerCase())){
+                artigosCientificos.add(new ArtigoCientifico(titulo, resumo, rotulo));
+                continue;
+            }
+
+            if (existsSubstring(substring.toLowerCase(), resumo.toLowerCase())){
+                artigosCientificos.add(new ArtigoCientifico(titulo, resumo, rotulo));
+                continue;
+            }
+
+            if (existsSubstring(substring.toLowerCase(), rotulo.toLowerCase()))
+                artigosCientificos.add(new ArtigoCientifico(titulo, resumo, rotulo));
+        }
+
+        return artigosCientificos;
+    }
+
+    private boolean existsSubstring(String substring, String text){
 
         String concat = substring + "$" + text;
 
@@ -22,53 +52,16 @@ public class ZAlgorithm implements SearchAlgorithm{
 
         getZarr(concat, Z);
 
+        boolean isFound = false;
+
         for(int i = 0; i < l; ++i){
 
             if(Z[i] == substring.length()){
-
-                StringBuilder substringBuilder = new StringBuilder(substring);
-
-                int indexSubstringNoTexto = i - substring.length() - 1;
-
-
-                while(true) {
-
-                    matcher = PATTERN.matcher(substringBuilder);
-
-                    if (matcher.find())
-                        break;
-
-                    substringBuilder.insert(0, text.charAt(--indexSubstringNoTexto));
-                }
-                String chaveSubstring = matcher.group();
-
-                Integer chaveComoNumero = Integer.valueOf(chaveSubstring.replaceAll("\"", "").replaceAll(":", ""));
-                chavesArtigosEncontrados.add(chaveComoNumero);
+                isFound = true;
+                break;
             }
         }
-
-        return retornaArtigosCientificos(chavesArtigosEncontrados, text);
-    }
-
-    private List<ArtigoCientifico> retornaArtigosCientificos(Set<Integer> chavesSubstrings, String text){
-
-        List<ArtigoCientifico> artigosCientificos = new LinkedList<>();
-
-        final JSONObject artigosJson = new JSONObject(text);
-
-        final JSONObject titulosJson = artigosJson.getJSONObject("title");
-        final JSONObject resumoJson = artigosJson.getJSONObject("abstract");
-        final JSONObject labelJson = artigosJson.getJSONObject("label");
-
-        chavesSubstrings.forEach(chave -> {
-            String titulo = titulosJson.getString(String.valueOf(chave));
-            String resumo = resumoJson.getString(String.valueOf(chave));
-            String rotulo = labelJson.getString(String.valueOf(chave));
-
-            artigosCientificos.add(new ArtigoCientifico(titulo, resumo, rotulo));
-        });
-
-        return artigosCientificos;
+        return isFound;
     }
 
     private void getZarr(String str, int[] Z) {
