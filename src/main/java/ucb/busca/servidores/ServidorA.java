@@ -1,5 +1,6 @@
 package ucb.busca.servidores;
 
+import org.json.JSONObject;
 import ucb.busca.servidores.testeAlgoritmos.*;
 import ucb.busca.servidores.util.ArtigoCientifico;
 
@@ -23,11 +24,12 @@ public class ServidorA {
     public static void main(String[] args) throws IOException {
         byte[] bytes = Files.readAllBytes(PATH_DADOS_JSON);
         String texto = new String(bytes);
+        JSONObject dataAsJson = new JSONObject(texto);
 
-        criaServidor(texto);
+        criaServidor(dataAsJson);
     }
 
-    private static void criaServidor(String texto) {
+    private static void criaServidor(JSONObject json) {
 
         try {
             ServerSocket servidor = new ServerSocket(PORTA);
@@ -49,7 +51,7 @@ public class ServidorA {
             executorThreadB.shutdown();
 
             long inicio = System.currentTimeMillis();
-            List<ArtigoCientifico> artigosDoServidorA = ALGORITMO_BUSCA.buscaSubString(texto.toLowerCase(), substring.toLowerCase());
+            List<ArtigoCientifico> artigosDoServidorA = ALGORITMO_BUSCA.buscaSubString(json, substring);
             long fim = System.currentTimeMillis();
 
             List<ArtigoCientifico> artigosTotal = new ArrayList<>();

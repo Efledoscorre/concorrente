@@ -4,9 +4,78 @@ import org.json.JSONObject;
 import ucb.busca.servidores.util.ArtigoCientifico;
 
 import java.util.*;
-import java.util.regex.Matcher;
 
 public class KMPAlgorithm implements SearchAlgorithm{
+
+    @Override
+    public List<ArtigoCientifico> buscaSubString(JSONObject json, String substring) {
+        System.out.println("SUBSTRING A SER ENCONTRADO: " + substring);
+        LinkedList<ArtigoCientifico> artigosCientificos = new LinkedList<>();
+
+        JSONObject tituloObj = json.getJSONObject("title");
+        JSONObject abstractObj = json.getJSONObject("abstract");
+        JSONObject labelObj = json.getJSONObject("label");
+
+        Iterator<String> chaves = tituloObj.keys();
+
+        while (chaves.hasNext()) {
+            String chave = chaves.next();
+
+            String titulo = tituloObj.getString(chave);
+            String resumo = abstractObj.getString(chave);
+            String rotulo = labelObj.getString(chave);
+
+            if (existsSubstring(substring.toLowerCase(), titulo.toLowerCase())){
+                artigosCientificos.add(new ArtigoCientifico(titulo, resumo, rotulo));
+                continue;
+            }
+
+            if (existsSubstring(substring.toLowerCase(), resumo.toLowerCase())){
+                artigosCientificos.add(new ArtigoCientifico(titulo, resumo, rotulo));
+                continue;
+            }
+
+            if (existsSubstring(substring.toLowerCase(), rotulo.toLowerCase()))
+                artigosCientificos.add(new ArtigoCientifico(titulo, resumo, rotulo));
+        }
+
+        return artigosCientificos;
+    }
+
+    private static boolean existsSubstring(String pat, String txt) {
+        int n = txt.length();
+        int m = pat.length();
+
+        int[] lps = new int[m];
+        boolean isFound = false;
+
+        constructLps(pat, lps);
+
+        int i = 0;
+        int j = 0;
+
+        while (i < n) {
+            if (txt.charAt(i) == pat.charAt(j)) {
+                i++;
+                j++;
+
+                if (j == m) {
+                    isFound = true;
+                    break;
+                }
+            }
+
+            else {
+
+                if (j != 0)
+                    j = lps[j - 1];
+                else
+                    i++;
+            }
+        }
+        return isFound;
+    }
+
     private static void constructLps(String pat, int[] lps) {
 
         int len = 0;
@@ -34,88 +103,5 @@ public class KMPAlgorithm implements SearchAlgorithm{
                 }
             }
         }
-    }
-
-    private static List<Integer> search(String pat, String txt) {
-        int n = txt.length();
-        int m = pat.length();
-
-        int[] lps = new int[m];
-        List<Integer> res = new ArrayList<>();
-
-        constructLps(pat, lps);
-
-        int i = 0;
-        int j = 0;
-
-        while (i < n) {
-            if (txt.charAt(i) == pat.charAt(j)) {
-                i++;
-                j++;
-
-                if (j == m) {
-                    res.add(i - j);
-
-                    j = lps[j - 1];
-                }
-            }
-
-            else {
-
-                if (j != 0)
-                    j = lps[j - 1];
-                else
-                    i++;
-            }
-        }
-        return res;
-    }
-
-    @Override
-    public List<ArtigoCientifico> buscaSubString(String text, String substring) {
-        List<Integer> res = search(substring, text);
-        Set<Integer> chavesArtigosEncontrados = new HashSet<>();
-        Matcher matcher = null;
-
-        for (int i = 0; i < res.size(); i++){
-            StringBuilder substringBuilder = new StringBuilder(substring);
-
-            int indexSubstringNoTexto = res.get(i);
-
-            while(true) {
-
-                matcher = PATTERN.matcher(substringBuilder);
-
-                if (matcher.find())
-                    break;
-
-                substringBuilder.insert(0, text.charAt(--indexSubstringNoTexto));
-            }
-            String chaveSubstring = matcher.group();
-
-            Integer chaveComoNumero = Integer.valueOf(chaveSubstring.replaceAll("\"", "").replaceAll(":", ""));
-            chavesArtigosEncontrados.add(chaveComoNumero);
-        }
-        return retornaArtigosCientificos(chavesArtigosEncontrados, text);
-    }
-
-    private List<ArtigoCientifico> retornaArtigosCientificos(Set<Integer> chavesSubstrings, String text){
-
-        List<ArtigoCientifico> artigosCientificos = new LinkedList<>();
-
-        final JSONObject artigosJson = new JSONObject(text);
-
-        final JSONObject titulosJson = artigosJson.getJSONObject("title");
-        final JSONObject resumoJson = artigosJson.getJSONObject("abstract");
-        final JSONObject labelJson = artigosJson.getJSONObject("label");
-
-        chavesSubstrings.forEach(chave -> {
-            String titulo = titulosJson.getString(String.valueOf(chave));
-            String resumo = resumoJson.getString(String.valueOf(chave));
-            String rotulo = labelJson.getString(String.valueOf(chave));
-
-            artigosCientificos.add(new ArtigoCientifico(titulo, resumo, rotulo));
-        });
-        return artigosCientificos;
     }
 }

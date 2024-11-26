@@ -7,8 +7,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import org.json.JSONObject;
 import ucb.busca.servidores.testeAlgoritmos.KMPAlgorithm;
 import ucb.busca.servidores.testeAlgoritmos.SearchAlgorithm;
+import ucb.busca.servidores.testeAlgoritmos.ZAlgorithm;
 import ucb.busca.servidores.util.ArtigoCientifico;
 
 public class ServidorB {
@@ -20,6 +22,7 @@ public class ServidorB {
     public static void main(String[] args) throws IOException {
     	byte[] bytes = Files.readAllBytes(PATH_DADOS_JSON);
         String texto = new String(bytes);
+        JSONObject dataAsJson = new JSONObject(texto);
 
         try {
             ServerSocket servidor = new ServerSocket(PORTA);
@@ -36,7 +39,7 @@ public class ServidorB {
             ObjectOutputStream saida = new ObjectOutputStream(cliente.getOutputStream());
 
             long inicio = System.currentTimeMillis();
-            List<ArtigoCientifico> artigoCientificos = ALGORITMO_BUSCA.buscaSubString(texto.toLowerCase(), substring.toLowerCase());
+            List<ArtigoCientifico> artigoCientificos = ALGORITMO_BUSCA.buscaSubString(dataAsJson, substring);
             long fim = System.currentTimeMillis();
 
             saida.writeObject(artigoCientificos);
